@@ -93,6 +93,26 @@ class MoneyField(models.DecimalField):
         super().__init__(verbose_name, *args, **kwargs)
 
 
+class TextField(models.TextField):
+    """
+    A TextField that defaults to an empty string and allows blank values.
+    This is useful for character fields where you want to avoid NULL values in the database
+    and have a consistent empty string as the default.
+
+    If help_text is not provided, it will use the verbose_name as help_text.
+    """
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("default", "")
+        kwargs.setdefault("blank", True)
+
+        # If help_text not provided, use verbose_name when available
+        if "help_text" not in kwargs and "verbose_name" in kwargs:
+            kwargs["help_text"] = kwargs["verbose_name"]
+
+        super().__init__(*args, **kwargs)
+
+
 class IntChoiceField(models.SmallIntegerField):
     """
     A SmallIntegerField that present as Choice Field.

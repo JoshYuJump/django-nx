@@ -25,6 +25,7 @@ Available Fields
 from .models.fields import (
     CharField,
     IntegerField,
+    TextField,
     IntChoiceField,
     TextChoiceField,
     MoneyField,
