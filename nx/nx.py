@@ -26,6 +26,7 @@ from .models.fields import (
     CharField,
     IntegerField,
     TextField,
+    BooleanField,
     IntChoiceField,
     TextChoiceField,
     MoneyField,

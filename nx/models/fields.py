@@ -113,6 +113,18 @@ class TextField(models.TextField):
         super().__init__(*args, **kwargs)
 
 
+class BooleanField(models.BooleanField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("default", False)
+        kwargs.setdefault("blank", True)
+
+        # If help_text not provided, use verbose_name when available
+        if "help_text" not in kwargs and "verbose_name" in kwargs:
+            kwargs["help_text"] = kwargs["verbose_name"]
+
+        super().__init__(*args, **kwargs)
+
+
 class IntChoiceField(models.SmallIntegerField):
     """
     A SmallIntegerField that present as Choice Field.
