@@ -29,3 +29,4 @@ from .models.fields import (
     TextChoiceField,
     MoneyField,
 )
+from . import restframework as drf
