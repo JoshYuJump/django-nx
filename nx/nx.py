@@ -12,14 +12,7 @@ Import fields directly from the nx package::
 
     from nx import nx
 
-Available Fields
-----------------
 
-:CharField: CharField with empty string default and auto help_text
-:IntegerField: IntegerField with auto help_text support
-:IntChoiceField: SmallIntegerField for choice options
-:TextChoiceField: CharField for text-based choices
-:MoneyField: DecimalField configured for monetary amounts
 """
 
 from .models.fields import (
@@ -30,5 +23,10 @@ from .models.fields import (
     IntChoiceField,
     TextChoiceField,
     MoneyField,
+    ForeignKey,
+    OneToOne,
+    ManyToMany,
+    ObjectField,
+    ArrayField,
 )
 from . import restframework as drf
