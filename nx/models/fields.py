@@ -14,8 +14,15 @@ Available Fields
 :CharField: CharField with empty string default and auto help_text
 :IntegerField: IntegerField with auto help_text support
 :MoneyField: DecimalField configured for monetary amounts
+:TextField: TextField with empty string default and auto help_text
+:BooleanField: BooleanField defaulting to False
 :IntChoiceField: SmallIntegerField for choice options
 :TextChoiceField: CharField for text-based choices
+:ForeignKey: ForeignKey with null/blank defaults
+:OneToOne: OneToOneField with null/blank defaults
+:ManyToMany: ManyToManyField with null/blank defaults
+:ObjectField: JSONField defaulting to empty dict
+:ArrayField: JSONField defaulting to empty list
 """
 
 from decimal import Decimal
@@ -162,3 +169,152 @@ class TextChoiceField(models.CharField):
             kwargs["help_text"] = verbose_name
 
         super().__init__(verbose_name, *args, **kwargs)
+
+
+class ForeignKey(models.ForeignKey):
+    """
+    A ForeignKey that defaults to common settings for reference fields.
+
+    Defaults:
+    - null=True
+    - blank=True
+    - default=None
+
+    Usage:
+        user = nx.ForeignKey('auth.User', 'user')
+        warehouse = nx.ForeignKey('admin_model.KZWareHouse', 'warehouse')
+    """
+
+    def __init__(self, to, verbose_name=None, *args, **kwargs):
+        # Sensible defaults for foreign keys
+        kwargs.setdefault("null", True)
+        kwargs.setdefault("blank", True)
+        kwargs.setdefault("default", None)
+
+        # If help_text not provided, use verbose_name when available
+        if verbose_name:
+            kwargs["verbose_name"] = verbose_name
+        if (
+            "help_text" not in kwargs
+            and "verbose_name" in kwargs
+            and kwargs["verbose_name"]
+        ):
+            kwargs["help_text"] = kwargs["verbose_name"]
+
+        super().__init__(to, *args, **kwargs)
+
+
+class OneToOne(models.OneToOneField):
+    """
+    A OneToOneField that defaults to common settings for reference fields.
+
+    Defaults:
+    - null=True
+    - blank=True
+    - default=None
+
+    Usage:
+        user = nx.OneToOne('auth.User', 'user')
+        warehouse = nx.OneToOne('admin_model.KZWareHouse', 'warehouse')
+    """
+
+    def __init__(self, to, verbose_name=None, *args, **kwargs):
+        # Sensible defaults for foreign keys
+        kwargs.setdefault("null", True)
+        kwargs.setdefault("blank", True)
+        kwargs.setdefault("default", None)
+
+        # If help_text not provided, use verbose_name when available
+        if verbose_name:
+            kwargs["verbose_name"] = verbose_name
+        if (
+            "help_text" not in kwargs
+            and "verbose_name" in kwargs
+            and kwargs["verbose_name"]
+        ):
+            kwargs["help_text"] = kwargs["verbose_name"]
+
+        super().__init__(to, *args, **kwargs)
+
+
+class ManyToMany(models.ManyToManyField):
+    """
+    A ManyToManyField that defaults to common settings for reference fields.
+
+    Defaults:
+    - null=True
+    - blank=True
+    - default=None
+
+    Usage:
+        user = nx.ManyToMany('auth.User', 'user')
+        warehouse = nx.ManyToMany('admin_model.KZWareHouse', 'warehouse')
+    """
+
+    def __init__(self, to, verbose_name=None, *args, **kwargs):
+        # Sensible defaults for foreign keys
+        kwargs.setdefault("null", True)
+        kwargs.setdefault("blank", True)
+        kwargs.setdefault("default", None)
+
+        # If help_text not provided, use verbose_name when available
+        if verbose_name:
+            kwargs["verbose_name"] = verbose_name
+        if (
+            "help_text" not in kwargs
+            and "verbose_name" in kwargs
+            and kwargs["verbose_name"]
+        ):
+            kwargs["help_text"] = kwargs["verbose_name"]
+
+        super().__init__(to, *args, **kwargs)
+
+
+class ObjectField(models.JSONField):
+    """
+    A JSONField that defaults to common settings for reference fields.
+
+    Defaults:
+    - blank=True
+    - default={}
+    """
+
+    def __init__(self, *args, **kwargs):
+        # Sensible defaults for foreign keys
+        kwargs.setdefault("blank", True)
+        kwargs.setdefault("default", dict)
+
+        # If help_text not provided, use verbose_name when available
+        if (
+            "help_text" not in kwargs
+            and "verbose_name" in kwargs
+            and kwargs["verbose_name"]
+        ):
+            kwargs["help_text"] = kwargs["verbose_name"]
+
+        super().__init__(*args, **kwargs)
+
+
+class ArrayField(models.JSONField):
+    """
+    A JSONField that defaults to common settings for reference fields.
+
+    Defaults:
+    - blank=True
+    - default=[]
+    """
+
+    def __init__(self, *args, **kwargs):
+        # Sensible defaults for foreign keys
+        kwargs.setdefault("blank", True)
+        kwargs.setdefault("default", list)
+
+        # If help_text not provided, use verbose_name when available
+        if (
+            "help_text" not in kwargs
+            and "verbose_name" in kwargs
+            and kwargs["verbose_name"]
+        ):
+            kwargs["help_text"] = kwargs["verbose_name"]
+
+        super().__init__(*args, **kwargs)
