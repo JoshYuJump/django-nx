@@ -20,6 +20,7 @@ from .models.fields import (
     IntegerField,
     TextField,
     BooleanField,
+    DateField,
     DateTimeField,
     IntChoiceField,
     TextChoiceField,
