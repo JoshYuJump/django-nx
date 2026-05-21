@@ -211,6 +211,7 @@ class ForeignKey(models.ForeignKey):
 
     def __init__(self, to, verbose_name=None, *args, **kwargs):
         # Sensible defaults for foreign keys
+        kwargs.setdefault("on_delete", models.CASCADE)
         kwargs.setdefault("null", True)
         kwargs.setdefault("blank", True)
         kwargs.setdefault("default", None)
@@ -244,6 +245,7 @@ class OneToOne(models.OneToOneField):
 
     def __init__(self, to, verbose_name=None, *args, **kwargs):
         # Sensible defaults for foreign keys
+        kwargs.setdefault("on_delete", models.CASCADE)
         kwargs.setdefault("null", True)
         kwargs.setdefault("blank", True)
         kwargs.setdefault("default", None)
