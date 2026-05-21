@@ -132,6 +132,18 @@ class BooleanField(models.BooleanField):
         super().__init__(*args, **kwargs)
 
 
+class DateTimeField(models.BooleanField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("null", True)
+        kwargs.setdefault("blank", True)
+
+        # If help_text not provided, use verbose_name when available
+        if "help_text" not in kwargs and "verbose_name" in kwargs:
+            kwargs["help_text"] = kwargs["verbose_name"]
+
+        super().__init__(*args, **kwargs)
+
+
 class IntChoiceField(models.SmallIntegerField):
     """
     A SmallIntegerField that present as Choice Field.
