@@ -28,6 +28,9 @@ from .models.fields import (
     ForeignKey,
     OneToOne,
     ManyToMany,
+    ShadowForeignKey,
+    ShadowOneToOne,
+    ShadowManyToMany,
     ObjectField,
     ArrayField,
 )
