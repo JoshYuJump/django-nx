@@ -158,14 +158,22 @@ class DateTimeField(models.DateTimeField):
 
 class IntChoiceField(models.SmallIntegerField):
     """
-    A SmallIntegerField that present as Choice Field.
+    SmallIntegerField that presents as a Choice field and accepts a Django-style
+    Choices class (e.g. IntegerChoices) passed via `choices` arg.
 
     If help_text is not provided, it will use the verbose_name as help_text.
     """
 
+    description = "SmallIntegerField with enum-style choices"
+
     def __init__(self, verbose_name=None, choices=None, *args, **kwargs):
-        if choices is not None:
-            kwargs["choices"] = choices
+        if not choices:
+            raise ValueError(
+                "choices is required and should be a Choices/enum class or iterable"
+            )
+
+        kwargs["choices"] = choices.choices
+        kwargs.setdefault("default", choices.choices[0][0])
 
         # If help_text not provided, use verbose_name when available
         if "help_text" not in kwargs and verbose_name is not None:
@@ -176,7 +184,8 @@ class IntChoiceField(models.SmallIntegerField):
 
 class TextChoiceField(models.CharField):
     """
-    A CharField that present as Choice Field.
+    CharField that presents as a Choice field and accepts a Django-style
+    Choices class (e.g. TextChoices) passed via `choices` arg.
 
     If help_text is not provided, it will use the verbose_name as help_text.
 
@@ -184,8 +193,14 @@ class TextChoiceField(models.CharField):
     """
 
     def __init__(self, verbose_name=None, choices=None, *args, **kwargs):
-        if choices is not None:
-            kwargs["choices"] = choices
+        if not choices:
+            raise ValueError(
+                "choices is required and should be a Choices/enum class or iterable"
+            )
+
+        kwargs["choices"] = choices.choices
+        kwargs.setdefault("default", choices.choices[0][0])
+
         kwargs.setdefault("max_length", 64)  # Default max length for choice fields
 
         # If help_text not provided, use verbose_name when available
