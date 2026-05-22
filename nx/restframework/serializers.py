@@ -14,3 +14,16 @@ class MoneyField(serializers.DecimalField):
 
 class MethodField(serializers.SerializerMethodField):
     pass
+
+
+class AutoInstanceLookupMixin:
+    def save(self, **kwargs):
+        pk = self.validated_data.get("id") if hasattr(self, "validated_data") else None
+        if not pk:
+            pk = self.initial_data.get("id")
+        if not self.instance and pk:
+            try:
+                self.instance = self.Meta.model.objects.get(pk=pk)
+            except self.Meta.model.DoesNotExist:
+                pass
+        return super().save(**kwargs)
