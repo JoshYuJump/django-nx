@@ -244,6 +244,12 @@ class ForeignKey(models.ForeignKey):
         super().__init__(to, *args, **kwargs)
 
 
+class ShadowForeignKey(ForeignKey):
+    def __init__(self, to, verbose_name=None, *args, **kwargs):
+        kwargs.setdefault("db_constraint", False)
+        super().__init__(to, *args, **kwargs)
+
+
 class OneToOne(models.OneToOneField):
     """
     A OneToOneField that defaults to common settings for reference fields.
@@ -278,6 +284,12 @@ class OneToOne(models.OneToOneField):
         super().__init__(to, *args, **kwargs)
 
 
+class ShadowOneToOne(OneToOne):
+    def __init__(self, to, verbose_name=None, *args, **kwargs):
+        kwargs.setdefault("db_constraint", False)
+        super().__init__(to, *args, **kwargs)
+
+
 class ManyToMany(models.ManyToManyField):
     """
     A ManyToManyField that defaults to common settings for reference fields.
@@ -308,6 +320,12 @@ class ManyToMany(models.ManyToManyField):
         ):
             kwargs["help_text"] = kwargs["verbose_name"]
 
+        super().__init__(to, *args, **kwargs)
+
+
+class ShadowManyToMany(ManyToMany):
+    def __init__(self, to, verbose_name=None, *args, **kwargs):
+        kwargs.setdefault("db_constraint", False)
         super().__init__(to, *args, **kwargs)
 
 
