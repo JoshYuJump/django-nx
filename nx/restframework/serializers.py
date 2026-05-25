@@ -16,6 +16,16 @@ class MethodField(serializers.SerializerMethodField):
     pass
 
 
+class QuantityField(serializers.IntegerField):
+    """
+    An IntegerField pre-configured for quantity values with a minimum value of 0.
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.setdefault("min_value", 0)
+        super().__init__(**kwargs)
+
+
 class AutoInstanceLookupMixin:
     def save(self, **kwargs):
         pk = self.validated_data.get("id") if hasattr(self, "validated_data") else None
