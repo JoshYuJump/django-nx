@@ -295,7 +295,6 @@ class ManyToMany(models.ManyToManyField):
     A ManyToManyField that defaults to common settings for reference fields.
 
     Defaults:
-    - null=True
     - blank=True
     - default=None
 
