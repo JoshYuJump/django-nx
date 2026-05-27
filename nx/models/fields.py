@@ -306,7 +306,6 @@ class ManyToMany(models.ManyToManyField):
 
     def __init__(self, to, verbose_name=None, *args, **kwargs):
         # Sensible defaults for foreign keys
-        kwargs.setdefault("null", True)
         kwargs.setdefault("blank", True)
         kwargs.setdefault("default", None)
 
