@@ -33,6 +33,7 @@ from .models.fields import (
     ShadowManyToMany,  # noqa: F401
     ObjectField,  # noqa: F401
     ArrayField,  # noqa: F401
+    ShortUUIDField,  # noqa: F401
 )
 from .models.base import Model  # noqa: F401
 from . import restframework as drf  # noqa: F401
