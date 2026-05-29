@@ -34,4 +34,5 @@ from .models.fields import (
     ObjectField,
     ArrayField,
 )
+from .models.base import Model
 from . import restframework as drf
