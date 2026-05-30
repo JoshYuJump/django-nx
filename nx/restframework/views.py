@@ -8,6 +8,18 @@ class ListMetadataMixin:
     - Scoped to the `list` action only.
     - Subclasses should override get_list_metadata(request, queryset, response)
       and return a JSON-serializable dict of metadata to merge into response.data['meta'].
+
+    Useage:
+
+    ```python
+    class MyViewSet(ListMetadataMixin, viewsets.ModelViewSet):
+        queryset = MyModel.objects.all()
+        serializer_class = MySerializer
+
+        def get_list_metadata(self, request, queryset, response):
+            return {"test": 1}
+    ```
+
     """
 
     list_metadata_root: Optional[str] = None
