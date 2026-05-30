@@ -195,6 +195,8 @@ class TextChoiceField(models.CharField):
     Default `max_length` is 64
     """
 
+    description = "64 characters CharField with enum-style choices"
+
     def __init__(self, verbose_name=None, choices=None, *args, **kwargs):
         if not choices:
             raise ValueError(
