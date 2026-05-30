@@ -174,9 +174,9 @@ class IntChoiceField(models.SmallIntegerField):
             raise ValueError(
                 "choices is required and should be a Choices/enum class or iterable"
             )
-
-        kwargs["choices"] = choices.choices
-        kwargs.setdefault("default", choices.choices[0][0])
+        choices = choices if isinstance(choices, list) else choices.choices
+        kwargs["choices"] = choices
+        kwargs.setdefault("default", choices[0][0])
 
         # If help_text not provided, use verbose_name when available
         if "help_text" not in kwargs and verbose_name is not None:
@@ -202,9 +202,9 @@ class TextChoiceField(models.CharField):
             raise ValueError(
                 "choices is required and should be a Choices/enum class or iterable"
             )
-
-        kwargs["choices"] = choices.choices
-        kwargs.setdefault("default", choices.choices[0][0])
+        choices = choices if isinstance(choices, list) else choices.choices
+        kwargs["choices"] = choices
+        kwargs.setdefault("default", choices[0][0])
 
         kwargs.setdefault("max_length", 64)  # Default max length for choice fields
 
