@@ -36,4 +36,5 @@ from .models.fields import (
     ShortUUIDField,  # noqa: F401
 )
 from .models.base import Model  # noqa: F401
+from .models.querysets import QuerySet  # noqa: F401
 from . import restframework as drf  # noqa: F401
