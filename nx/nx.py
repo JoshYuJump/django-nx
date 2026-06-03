@@ -15,6 +15,7 @@ Import fields directly from the nx package::
 
 """
 
+from .models.enums import IntegerChoices, TextChoices  # noqa: F401
 from .models.fields import (
     CharField,  # noqa: F401
     IntegerField,  # noqa: F401
@@ -36,4 +37,5 @@ from .models.fields import (
     ShortUUIDField,  # noqa: F401
 )
 from .models.base import Model  # noqa: F401
+from .models.querysets import QuerySet  # noqa: F401
 from . import restframework as drf  # noqa: F401
