@@ -4,10 +4,12 @@ from django.db import models
 class IntegerChoicesMeta(type(models.IntegerChoices)):
     def __new__(mcls, name, bases, attrs):
         meta = attrs.pop("Meta", None)
+        member_names = getattr(attrs, "_member_names", None)
+        if member_names and "Meta" in member_names:
+            member_names.remove("Meta")
         start = getattr(meta, "start", 1)
         counter = start
-        new_attrs = dict(attrs)
-        for k, v in list(new_attrs.items()):
+        for k, v in list(attrs.items()):
             if k.startswith("_"):
                 continue
             if isinstance(v, tuple):
@@ -16,9 +18,9 @@ class IntegerChoicesMeta(type(models.IntegerChoices)):
                 counter = max(counter, v + 1)
                 continue
             if isinstance(v, str):
-                new_attrs[k] = (counter, v)
+                dict.__setitem__(attrs, k, (counter, v))
                 counter += 1
-        return super().__new__(mcls, name, bases, new_attrs)
+        return super().__new__(mcls, name, bases, attrs)
 
 
 class IntegerChoices(models.IntegerChoices, metaclass=IntegerChoicesMeta):
@@ -40,11 +42,10 @@ class IntegerChoices(models.IntegerChoices, metaclass=IntegerChoicesMeta):
 
 class LowerTextChoicesMeta(type(models.TextChoices)):
     def __new__(mcls, name, bases, attrs):
-        new_attrs = dict(attrs)
-        for k, v in list(new_attrs.items()):
+        for k, v in list(attrs.items()):
             if not k.startswith("_") and isinstance(v, str):
-                new_attrs[k] = (k.lower(), v)
-        return super().__new__(mcls, name, bases, new_attrs)
+                dict.__setitem__(attrs, k, (k.lower(), v))
+        return super().__new__(mcls, name, bases, attrs)
 
 
 class TextChoices(models.TextChoices, metaclass=LowerTextChoicesMeta):
