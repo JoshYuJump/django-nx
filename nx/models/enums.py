@@ -6,7 +6,8 @@ class IntegerChoicesMeta(type(models.IntegerChoices)):
         meta = attrs.pop("Meta", None)
         start = getattr(meta, "start", 1)
         counter = start
-        for k, v in list(attrs.items()):
+        new_attrs = dict(attrs)
+        for k, v in list(new_attrs.items()):
             if k.startswith("_"):
                 continue
             if isinstance(v, tuple):
@@ -15,9 +16,9 @@ class IntegerChoicesMeta(type(models.IntegerChoices)):
                 counter = max(counter, v + 1)
                 continue
             if isinstance(v, str):
-                attrs[k] = (counter, v)
+                new_attrs[k] = (counter, v)
                 counter += 1
-        return super().__new__(mcls, name, bases, attrs)
+        return super().__new__(mcls, name, bases, new_attrs)
 
 
 class IntegerChoices(models.IntegerChoices, metaclass=IntegerChoicesMeta):
@@ -39,10 +40,11 @@ class IntegerChoices(models.IntegerChoices, metaclass=IntegerChoicesMeta):
 
 class LowerTextChoicesMeta(type(models.TextChoices)):
     def __new__(mcls, name, bases, attrs):
-        for k, v in list(attrs.items()):
+        new_attrs = dict(attrs)
+        for k, v in list(new_attrs.items()):
             if not k.startswith("_") and isinstance(v, str):
-                attrs[k] = (k.lower(), v)
-        return super().__new__(mcls, name, bases, attrs)
+                new_attrs[k] = (k.lower(), v)
+        return super().__new__(mcls, name, bases, new_attrs)
 
 
 class TextChoices(models.TextChoices, metaclass=LowerTextChoicesMeta):
