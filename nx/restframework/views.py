@@ -63,16 +63,17 @@ class ListMetadataMixin:
             original = getattr(response, "data", None)
             data = {"results": original}
 
-        if self.list_metadata_root is None:
+        metadata_root = getattr(self, "list_metadata_root", None)
+        if metadata_root is None:
             # Merge metadata into top-level response.data (may overwrite same-named keys)
             data.update(extra_meta)
         else:
             # Merge into a dedicated root key (ensure it's a dict)
-            root = data.get(self.list_metadata_root) or {}
+            root = data.get(metadata_root) or {}
             if not isinstance(root, dict):
                 root = {"value": root}
             root.update(extra_meta)
-            data[self.list_metadata_root] = root
+            data[metadata_root] = root
 
         response.data = data
         return response
