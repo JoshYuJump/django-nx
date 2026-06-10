@@ -1,10 +1,11 @@
 [project]
 name = "django-nx"
-version = "0.3.4"
+version = "0.3.5"
 description = "Lightweight Django field utilities and extensions"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
+    "pyhumps",
     "django>=3.2,<6.1",
     "djangorestframework>=3.12.4,<3.18",
     "shortuuid>=1.0.13,<1.1"

@@ -40,6 +40,40 @@ class IntegerChoices(models.IntegerChoices, metaclass=IntegerChoicesMeta):
     pass
 
 
+class ZeroBasedChoicesMeta(IntegerChoicesMeta):
+    """Metaclass that defaults the sequence start to 0 instead of 1."""
+
+    def __new__(mcls, name, bases, attrs):
+        meta = attrs.get("Meta")
+        if meta is None:
+
+            class Meta:
+                start = 0
+
+            attrs["Meta"] = Meta
+        elif not hasattr(meta, "start"):
+
+            class ZeroMeta(meta):
+                start = 0
+
+            attrs["Meta"] = ZeroMeta
+        return super().__new__(mcls, name, bases, attrs)
+
+
+class ZeroBasedChoices(IntegerChoices, metaclass=ZeroBasedChoicesMeta):
+    """Integer choices that automatically start from 0 instead of 1.
+
+    ```python
+    class Priority(ZeroBasedChoices):
+        LOW = "Low Priority"        # 0
+        MEDIUM = "Medium Priority"  # 1
+        HIGH = "High Priority"      # 2
+    ```
+    """
+
+    pass
+
+
 class LowerTextChoicesMeta(type(models.TextChoices)):
     def __new__(mcls, name, bases, attrs):
         for k, v in list(attrs.items()):
