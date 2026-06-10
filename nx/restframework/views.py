@@ -20,13 +20,13 @@ class ListMetadataMixin:
         queryset = MyModel.objects.all()
         serializer_class = MySerializer
 
+        list_metadata_root = "root"
+
         def get_list_metadata(self, request, queryset, response):
             return {"test": 1}
     ```
 
     """
-
-    list_metadata_root: Optional[str] = None
 
     def get_list_metadata(
         self, request, queryset: Optional[Any], response: Optional[Response]
