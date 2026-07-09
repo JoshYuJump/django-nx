@@ -19,8 +19,7 @@ Requires **Python >= 3.9**, **Django >= 3.2**, and **Django REST Framework >= 3.
 ## Quick Start
 
 ```python
-import nx
-from django.db import models
+from nx import nx
 
 class Product(nx.Model):
     name = nx.CharField('Name') # Default max_length=128
