@@ -5,10 +5,13 @@ class IntegerChoicesMeta(type(models.IntegerChoices)):
     def __new__(mcls, name, bases, attrs):
         meta = attrs.pop("Meta", None)
         member_names = getattr(attrs, "_member_names", None)
-        if member_names and "Meta" in member_names:
+        if isinstance(member_names, dict):
+            member_names.pop("Meta", None)
+        elif member_names and "Meta" in member_names:
             member_names.remove("Meta")
         start = getattr(meta, "start", 1)
         counter = start
+
         for k, v in list(attrs.items()):
             if k.startswith("_"):
                 continue
@@ -20,6 +23,7 @@ class IntegerChoicesMeta(type(models.IntegerChoices)):
             if isinstance(v, str):
                 dict.__setitem__(attrs, k, (counter, v))
                 counter += 1
+
         return super().__new__(mcls, name, bases, attrs)
 
 
