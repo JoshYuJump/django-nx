@@ -39,6 +39,7 @@ class Product(nx.Model):
 - [QuerySet](#queryset)
 - [DRF Serializers](#drf-serializers)
 - [DRF Views](#drf-views)
+- [DRF Router](#drf-router)
 - [Utilities](#utilities)
 
 ---
@@ -243,6 +244,24 @@ class ProductViewSet(nx.drf.ListMetadataMixin, viewsets.ModelViewSet):
   "total": 100,
   "timestamp": "2024-01-15T09:30:00Z"
 }
+```
+
+---
+
+## DRF Router
+
+`nx.Router` wraps DRF's `DefaultRouter`. Routes have no trailing slash, and
+`register()` derives the default basename from the singular form of `prefix`.
+An explicitly supplied basename is left unchanged.
+
+```python
+from nx import nx
+
+router = nx.Router()
+router.register("products", ProductViewSet)
+
+# Route: /products (not /products/)
+# Basename: product
 ```
 
 ---
