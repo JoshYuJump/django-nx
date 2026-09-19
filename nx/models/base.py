@@ -1,5 +1,9 @@
+from typing import Any
+
 import humps
 from django.db import models
+
+__all__ = ["Model"]
 
 
 class Model(models.Model):
@@ -17,7 +21,7 @@ class Model(models.Model):
         abstract = True
 
     @classmethod
-    def __init_subclass__(cls, **kwargs):
+    def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
         meta = cls._meta
 

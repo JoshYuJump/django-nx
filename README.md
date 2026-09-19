@@ -19,7 +19,7 @@ Requires **Python >= 3.9**, **Django >= 3.2**, and **Django REST Framework >= 3.
 ## Quick Start
 
 ```python
-from nx import nx
+import nx
 
 class Product(nx.Model):
     name = nx.CharField('Name') # Default max_length=128
@@ -41,6 +41,7 @@ class Product(nx.Model):
 - [DRF Views](#drf-views)
 - [DRF Router](#drf-router)
 - [Utilities](#utilities)
+- [AI Coding Agents](#ai-coding-agents)
 
 ---
 
@@ -255,7 +256,7 @@ class ProductViewSet(nx.drf.ListMetadataMixin, viewsets.ModelViewSet):
 An explicitly supplied basename is left unchanged.
 
 ```python
-from nx import nx
+import nx
 
 router = nx.Router()
 router.register("products", ProductViewSet)
@@ -263,6 +264,49 @@ router.register("products", ProductViewSet)
 # Route: /products (not /products/)
 # Basename: product
 ```
+
+---
+
+## AI Coding Agents
+
+django-nx ships a version-matched public API contract at `nx/ai_context.md` and
+publishes an [llms.txt](https://github.com/JoshYuJump/django-nx/blob/main/llms.txt)
+discovery file. AI coding agents should read
+the installed contract before changing Django models or DRF code, so their
+guidance matches the version used by the application.
+
+If a project uses both django-nx and an AI coding agent, add the following
+instructions to that project's `README.md`:
+
+````md
+## django-nx development rules
+
+This project uses django-nx. Before changing Django models, serializers,
+viewsets, or routes, locate and read the API contract bundled with the installed
+django-nx version:
+
+```bash
+python -c 'from importlib.metadata import distribution; print(distribution("django-nx").locate_file("nx/ai_context.md"))'
+```
+
+- Use `import nx` and the public APIs documented in `nx/ai_context.md`.
+- Prefer django-nx fields, model helpers, serializers, views, and router when
+  the contract provides the required behavior.
+- Do not inspect django-nx implementation source unless the public contract is
+  insufficient or you are diagnosing a django-nx defect.
+- Do not depend on undocumented names or internal implementation details.
+````
+
+When the installed Python environment is unavailable, use the
+[online AI API context](https://raw.githubusercontent.com/JoshYuJump/django-nx/main/nx/ai_context.md)
+as a fallback. The installed contract takes precedence because it matches the
+project's installed django-nx version.
+
+Ready-to-copy rules for AGENTS.md, Claude Code, and Cursor are available in the
+[AI project setup guide](https://github.com/JoshYuJump/django-nx/blob/main/docs/ai-project-setup.md).
+
+The preferred import is `import nx`. The older `from nx import nx` form remains
+supported for backwards compatibility.
 
 ---
 

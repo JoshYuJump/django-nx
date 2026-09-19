@@ -26,11 +26,33 @@ Available Fields
 """
 
 from decimal import Decimal
+from typing import Any, Optional
 import uuid
 import shortuuid
 
 from django.db import models
 from django.utils.encoding import force_str
+
+__all__ = [
+    "ArrayField",
+    "BooleanField",
+    "CharField",
+    "DateField",
+    "DateTimeField",
+    "ForeignKey",
+    "IntChoiceField",
+    "IntegerField",
+    "ManyToMany",
+    "MoneyField",
+    "ObjectField",
+    "OneToOne",
+    "ShadowForeignKey",
+    "ShadowManyToMany",
+    "ShadowOneToOne",
+    "ShortUUIDField",
+    "TextChoiceField",
+    "TextField",
+]
 
 
 class CharField(models.CharField):
@@ -44,7 +66,7 @@ class CharField(models.CharField):
     default max_length is 128
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         kwargs.setdefault("default", "")
         kwargs.setdefault("blank", True)
         kwargs.setdefault("max_length", 128)
@@ -63,7 +85,7 @@ class IntegerField(models.IntegerField):
 
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         # If help_text is not provided, use verbose_name as help_text
         if "help_text" not in kwargs and "verbose_name" in kwargs:
             kwargs["help_text"] = kwargs["verbose_name"]
@@ -86,7 +108,9 @@ class MoneyField(models.DecimalField):
         tax = MoneyField('税额', max_digits=14, decimal_places=4)
     """
 
-    def __init__(self, verbose_name=None, *args, **kwargs):
+    def __init__(
+        self, verbose_name: Optional[str] = None, *args: Any, **kwargs: Any
+    ) -> None:
         # Sensible defaults; allow override by explicit kwargs
         kwargs["max_digits"] = kwargs.get("max_digits", 18)
         kwargs["decimal_places"] = kwargs.get("decimal_places", 2)
@@ -112,7 +136,7 @@ class TextField(models.TextField):
     If help_text is not provided, it will use the verbose_name as help_text.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         kwargs.setdefault("default", "")
         kwargs.setdefault("blank", True)
 
@@ -124,7 +148,9 @@ class TextField(models.TextField):
 
 
 class BooleanField(models.BooleanField):
-    def __init__(self, *args, **kwargs):
+    """BooleanField defaulting to ``False`` with blank values allowed."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         kwargs.setdefault("default", False)
         kwargs.setdefault("blank", True)
 
@@ -136,7 +162,9 @@ class BooleanField(models.BooleanField):
 
 
 class DateField(models.DateField):
-    def __init__(self, *args, **kwargs):
+    """Nullable and blankable DateField."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         kwargs.setdefault("null", True)
         kwargs.setdefault("blank", True)
 
@@ -148,7 +176,9 @@ class DateField(models.DateField):
 
 
 class DateTimeField(models.DateTimeField):
-    def __init__(self, *args, **kwargs):
+    """Nullable and blankable DateTimeField."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         kwargs.setdefault("null", True)
         kwargs.setdefault("blank", True)
 
@@ -169,7 +199,13 @@ class IntChoiceField(models.SmallIntegerField):
 
     description = "SmallIntegerField with enum-style choices"
 
-    def __init__(self, verbose_name=None, choices=None, *args, **kwargs):
+    def __init__(
+        self,
+        verbose_name: Optional[str] = None,
+        choices: Any = None,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         if not choices:
             raise ValueError(
                 "choices is required and should be a Choices/enum class or iterable"
@@ -197,7 +233,13 @@ class TextChoiceField(models.CharField):
 
     description = "64 characters CharField with enum-style choices"
 
-    def __init__(self, verbose_name=None, choices=None, *args, **kwargs):
+    def __init__(
+        self,
+        verbose_name: Optional[str] = None,
+        choices: Any = None,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         if not choices:
             raise ValueError(
                 "choices is required and should be a Choices/enum class or iterable"
@@ -229,7 +271,9 @@ class ForeignKey(models.ForeignKey):
         warehouse = nx.ForeignKey('admin_model.KZWareHouse', 'warehouse')
     """
 
-    def __init__(self, to, verbose_name=None, *args, **kwargs):
+    def __init__(
+        self, to: Any, verbose_name: Optional[str] = None, *args: Any, **kwargs: Any
+    ) -> None:
         # Sensible defaults for foreign keys
         kwargs.setdefault("on_delete", models.CASCADE)
         kwargs.setdefault("null", True)
@@ -250,7 +294,11 @@ class ForeignKey(models.ForeignKey):
 
 
 class ShadowForeignKey(ForeignKey):
-    def __init__(self, to, verbose_name=None, *args, **kwargs):
+    """ForeignKey with database constraints disabled by default."""
+
+    def __init__(
+        self, to: Any, verbose_name: Optional[str] = None, *args: Any, **kwargs: Any
+    ) -> None:
         kwargs.setdefault("db_constraint", False)
         super().__init__(to, *args, **kwargs)
 
@@ -269,7 +317,9 @@ class OneToOne(models.OneToOneField):
         warehouse = nx.OneToOne('admin_model.KZWareHouse', 'warehouse')
     """
 
-    def __init__(self, to, verbose_name=None, *args, **kwargs):
+    def __init__(
+        self, to: Any, verbose_name: Optional[str] = None, *args: Any, **kwargs: Any
+    ) -> None:
         # Sensible defaults for foreign keys
         kwargs.setdefault("on_delete", models.CASCADE)
         kwargs.setdefault("null", True)
@@ -290,7 +340,11 @@ class OneToOne(models.OneToOneField):
 
 
 class ShadowOneToOne(OneToOne):
-    def __init__(self, to, verbose_name=None, *args, **kwargs):
+    """OneToOne field with database constraints disabled by default."""
+
+    def __init__(
+        self, to: Any, verbose_name: Optional[str] = None, *args: Any, **kwargs: Any
+    ) -> None:
         kwargs.setdefault("db_constraint", False)
         super().__init__(to, *args, **kwargs)
 
@@ -308,7 +362,9 @@ class ManyToMany(models.ManyToManyField):
         warehouse = nx.ManyToMany('admin_model.KZWareHouse', 'warehouse')
     """
 
-    def __init__(self, to, verbose_name=None, *args, **kwargs):
+    def __init__(
+        self, to: Any, verbose_name: Optional[str] = None, *args: Any, **kwargs: Any
+    ) -> None:
         # Sensible defaults for foreign keys
         kwargs.setdefault("blank", True)
         kwargs.setdefault("default", None)
@@ -327,7 +383,11 @@ class ManyToMany(models.ManyToManyField):
 
 
 class ShadowManyToMany(ManyToMany):
-    def __init__(self, to, verbose_name=None, *args, **kwargs):
+    """ManyToMany field with database constraints disabled by default."""
+
+    def __init__(
+        self, to: Any, verbose_name: Optional[str] = None, *args: Any, **kwargs: Any
+    ) -> None:
         kwargs.setdefault("db_constraint", False)
         super().__init__(to, *args, **kwargs)
 
@@ -341,7 +401,7 @@ class ObjectField(models.JSONField):
     - default={}
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         # Sensible defaults for foreign keys
         kwargs.setdefault("blank", True)
         kwargs.setdefault("default", dict)
@@ -366,7 +426,7 @@ class ArrayField(models.JSONField):
     - default=[]
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         # Sensible defaults for foreign keys
         kwargs.setdefault("blank", True)
         kwargs.setdefault("default", list)
@@ -400,17 +460,17 @@ class UUIDFieldMixin:
 
     def __init__(
         self,
-        verbose_name=None,
-        name=None,
-        auto=True,
-        version=4,
-        node=None,
-        clock_seq=None,
-        namespace=None,
-        uuid_name=None,
-        *args,
-        **kwargs,
-    ):
+        verbose_name: Optional[str] = None,
+        name: Optional[str] = None,
+        auto: bool = True,
+        version: Optional[int] = 4,
+        node: Optional[int] = None,
+        clock_seq: Optional[int] = None,
+        namespace: Any = None,
+        uuid_name: Optional[str] = None,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
 
         kwargs.setdefault("max_length", self.DEFAULT_MAX_LENGTH)
 
@@ -428,7 +488,7 @@ class UUIDFieldMixin:
 
         super().__init__(verbose_name=verbose_name, *args, **kwargs)
 
-    def create_uuid(self):
+    def create_uuid(self) -> Any:
         if not self.version or self.version == 4:
             return uuid.uuid4()
         elif self.version == 1:
@@ -442,7 +502,7 @@ class UUIDFieldMixin:
         else:
             raise UUIDVersionError("UUID version %s is not valid." % self.version)
 
-    def pre_save(self, model_instance, add):
+    def pre_save(self, model_instance: Any, add: bool) -> Any:
         value = super().pre_save(model_instance, add)
 
         if self.auto and add and value is None:
@@ -456,12 +516,14 @@ class UUIDFieldMixin:
 
         return value
 
-    def formfield(self, form_class=None, choices_form_class=None, **kwargs):
+    def formfield(
+        self, form_class: Any = None, choices_form_class: Any = None, **kwargs: Any
+    ) -> Any:
         if self.auto:
             return None
         return super().formfield(form_class, choices_form_class, **kwargs)
 
-    def deconstruct(self):
+    def deconstruct(self) -> Any:
         name, path, args, kwargs = super().deconstruct()
 
         if kwargs.get("max_length", None) == self.DEFAULT_MAX_LENGTH:
@@ -496,11 +558,11 @@ class ShortUUIDField(UUIDFieldMixin, CharField):
 
     DEFAULT_MAX_LENGTH = 22
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         kwargs.setdefault("max_length", self.DEFAULT_MAX_LENGTH)
 
-    def create_uuid(self):
+    def create_uuid(self) -> str:
         if not self.version or self.version == 4:
             return shortuuid.uuid()
         elif self.version == 1:

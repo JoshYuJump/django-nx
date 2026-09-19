@@ -1,6 +1,11 @@
+from __future__ import annotations
+
 from typing import Optional, Tuple
+
 from django.db import models
 from django.db.models import QuerySet as DBQuerySet, BooleanField
+
+__all__ = ["QuerySet"]
 
 
 class QuerySet(DBQuerySet):
@@ -30,7 +35,7 @@ class QuerySet(DBQuerySet):
             model._resolved_deleted_field = (None, None)
             return None, None
 
-    def valid(self):
+    def valid(self) -> QuerySet:
         """
         Return queryset of records not marked as deleted.
         For BooleanField use False; for other types (Only supoort numeric fields) use 0.
@@ -42,7 +47,7 @@ class QuerySet(DBQuerySet):
         # Treat NULL as equivalent to 0 by default
         return self.filter(**{name: 0})
 
-    def invalid(self):
+    def invalid(self) -> QuerySet:
         """
         Return queryset of records marked as deleted.
         BooleanField -> True, others -> 1
