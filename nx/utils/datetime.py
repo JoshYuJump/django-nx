@@ -3,11 +3,15 @@ from dataclasses import dataclass
 from django.utils import timezone
 from django.conf import settings
 
+__all__ = ["DatetimeRange", "StatDatetimeRange", "get_stat_datetime_range"]
+
 DatetimeRange = tuple[datetime, datetime]
 
 
 @dataclass
 class StatDatetimeRange:
+    """Inclusive date-time ranges for common reporting periods."""
+
     today: DatetimeRange
     week: DatetimeRange
     month: DatetimeRange
@@ -15,6 +19,7 @@ class StatDatetimeRange:
 
 
 def get_stat_datetime_range() -> StatDatetimeRange:
+    """Return inclusive today, week, month, and year ranges in Django's timezone."""
     if settings.USE_TZ:
         now = timezone.localtime(timezone.now())  # aware
         tzinfo = now.tzinfo

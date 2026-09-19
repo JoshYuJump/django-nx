@@ -1,3 +1,5 @@
+from typing import Any, Optional
+
 from rest_framework.routers import DefaultRouter
 
 __all__ = ["Router"]
@@ -27,7 +29,7 @@ _IRREGULAR_NOUNS = {
 }
 
 
-def _singularize(value):
+def _singularize(value: str) -> str:
     """Return a conservative English singular form while preserving case."""
     lower_value = value.lower()
     if lower_value in _UNCOUNTABLE_NOUNS:
@@ -53,12 +55,14 @@ def _singularize(value):
 class Router(DefaultRouter):
     """A ``DefaultRouter`` with slashless routes and inferred singular basenames."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         if not args:
             kwargs.setdefault("trailing_slash", False)
         super().__init__(*args, **kwargs)
 
-    def register(self, prefix, viewset, basename=None):
+    def register(
+        self, prefix: str, viewset: Any, basename: Optional[str] = None
+    ) -> None:
         if basename is None:
             basename = _singularize(prefix)
         return super().register(prefix, viewset, basename)

@@ -1,0 +1,21 @@
+# django-nx
+
+> A lightweight, opinionated set of Django model fields, model/queryset helpers,
+> and Django REST Framework extensions. Current project version: 0.7.0.
+
+The recommended import is `import nx`. Public APIs are explicitly exported by
+`nx.__all__`; DRF APIs are under `nx.drf`. The installed distribution includes
+the version-matched AI API contract at `nx/ai_context.md`.
+
+## Documentation
+
+- [AI API context](https://github.com/JoshYuJump/django-nx/blob/main/nx/ai_context.md): concise public API, defaults, examples, and compatibility
+- [README](https://github.com/JoshYuJump/django-nx/blob/main/README.md): human-oriented guide and examples
+- [AI project setup](https://github.com/JoshYuJump/django-nx/blob/main/docs/ai-project-setup.md): AGENTS.md, Claude Code, and Cursor templates
+- [PyPI package](https://pypi.org/project/django-nx/): releases and installation metadata
+
+## Source of truth
+
+For a project with django-nx installed, prefer the bundled `nx/ai_context.md`
+because it matches the installed package version. Use online documentation only
+when the installed contract is unavailable.

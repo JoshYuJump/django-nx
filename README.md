@@ -19,7 +19,7 @@ Requires **Python >= 3.9**, **Django >= 3.2**, and **Django REST Framework >= 3.
 ## Quick Start
 
 ```python
-from nx import nx
+import nx
 
 class Product(nx.Model):
     name = nx.CharField('Name') # Default max_length=128
@@ -41,6 +41,7 @@ class Product(nx.Model):
 - [DRF Views](#drf-views)
 - [DRF Router](#drf-router)
 - [Utilities](#utilities)
+- [AI Coding Agents](#ai-coding-agents)
 
 ---
 
@@ -255,7 +256,7 @@ class ProductViewSet(nx.drf.ListMetadataMixin, viewsets.ModelViewSet):
 An explicitly supplied basename is left unchanged.
 
 ```python
-from nx import nx
+import nx
 
 router = nx.Router()
 router.register("products", ProductViewSet)
@@ -263,6 +264,22 @@ router.register("products", ProductViewSet)
 # Route: /products (not /products/)
 # Basename: product
 ```
+
+---
+
+## AI Coding Agents
+
+django-nx ships a version-matched public API contract at `nx/ai_context.md` and
+publishes an [llms.txt](https://github.com/JoshYuJump/django-nx/blob/main/llms.txt)
+discovery file. AI coding agents should read
+the installed contract before changing Django models or DRF code, so their
+guidance matches the version used by the application.
+
+Ready-to-copy rules for AGENTS.md, Claude Code, and Cursor are available in the
+[AI project setup guide](https://github.com/JoshYuJump/django-nx/blob/main/docs/ai-project-setup.md).
+
+The preferred import is `import nx`. The older `from nx import nx` form remains
+supported for backwards compatibility.
 
 ---
 

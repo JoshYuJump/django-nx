@@ -40,7 +40,7 @@ class ListMetadataMixin:
         """
         return {}
 
-    def list(self, request, *args, **kwargs) -> Response:
+    def list(self, request: Any, *args: Any, **kwargs: Any) -> Response:
         # Call parent list to preserve filtering/pagination/serialization behavior.
         response = super().list(request, *args, **kwargs)
 
