@@ -203,6 +203,25 @@ class ProductSerializer(nx.drf.AutoInstanceLookupMixin, serializers.ModelSeriali
 
 ## DRF Views
 
+### SerializerClassesMixin
+
+Select a serializer by ViewSet action. Actions not listed in `serializer_classes`
+use the regular `serializer_class`.
+
+```python
+from rest_framework import viewsets
+import nx
+
+class InboundOrderViewSet(nx.drf.SerializerClassesMixin, viewsets.ModelViewSet):
+    queryset = InboundOrder.objects.all()
+    serializer_class = InboundOrderDetailSerializer
+    serializer_classes = {
+        "list": InboundOrderListSerializer,
+        "retrieve": InboundOrderDetailSerializer,
+        "create": InboundOrderCreateSerializer,
+    }
+```
+
 ### ListMetadataMixin
 
 Inject a top-level `meta` object (or any custom root key) into `list` responses.

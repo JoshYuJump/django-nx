@@ -1,4 +1,4 @@
-# django-nx 0.7.0 — AI API context
+# django-nx 0.8.0 — AI API context
 
 django-nx provides small, opinionated extensions for Django models and Django
 REST Framework. Treat the API listed here as public. Prefer it over inspecting
@@ -88,6 +88,8 @@ class ProductSerializer(
 - `nx.drf.ListMetadataMixin`: calls `get_list_metadata(request, queryset,
   response)` during list responses. With `list_metadata_root` set, metadata is
   placed below that key; otherwise it is merged into the response root.
+- `nx.drf.SerializerClassesMixin`: selects a serializer from `serializer_classes`
+  by ViewSet action, falling back to `serializer_class` for unlisted actions.
 
 ## Router
 
