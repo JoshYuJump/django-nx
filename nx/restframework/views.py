@@ -3,7 +3,18 @@ from rest_framework.response import Response
 
 __all__ = [
     "ListMetadataMixin",
+    "SerializerClassesMixin",
 ]
+
+
+class SerializerClassesMixin:
+    serializer_classes = {}
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_classes.get(getattr(self, "action", None))
+        if serializer_class is not None:
+            return serializer_class
+        return super().get_serializer_class()
 
 
 class ListMetadataMixin:

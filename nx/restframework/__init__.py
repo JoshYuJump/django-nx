@@ -7,7 +7,7 @@ from .serializers import (
     MoneyField,
     QuantityField,
 )
-from .views import ListMetadataMixin
+from .views import ListMetadataMixin, SerializerClassesMixin
 
 __all__ = [
     "AutoInstanceLookupMixin",
@@ -16,4 +16,5 @@ __all__ = [
     "MoneyField",
     "QuantityField",
     "Router",
+    "SerializerClassesMixin",
 ]
