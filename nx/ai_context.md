@@ -1,4 +1,4 @@
-# django-nx 0.8.0 — AI API context
+# django-nx 0.9.0 — AI API context
 
 django-nx provides small, opinionated extensions for Django models and Django
 REST Framework. Treat the API listed here as public. Prefer it over inspecting
