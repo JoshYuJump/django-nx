@@ -54,7 +54,13 @@ All fields automatically use `verbose_name` as `help_text` when `help_text` is n
 | Field | Default | Description |
 |-------|---------|-------------|
 | `CharField` | `default=""`, `blank=True`, `max_length=128` | String field with empty string default |
+| `NameField` | `default=""`, `blank=True`, `max_length=128` | Name |
+| `CodeField` | `default=""`, `blank=True`, `max_length=64` | Code |
+| `PhoneField` | `default=""`, `blank=True`, `max_length=32` | Phone number stored as text |
+| `EmailField` | `default=""`, `blank=True`, `max_length=254` | Validated email address |
+| `UrlField` | `default=""`, `blank=True`, `max_length=200` | Validated URL |
 | `TextField` | `default=""`, `blank=True` | Long text field with empty string default |
+| `RemarkField` | `default=""`, `blank=True` | Free-form remark |
 | `TextChoiceField` | `max_length=64`, defaults to first choice | CharField backed by choices enum |
 
 ```python
@@ -69,6 +75,10 @@ priority = nx.TextChoiceField('Priority', choices=PriorityLevel)
 |-------|---------|-------------|
 | `IntegerField` | — | Standard integer with auto help_text |
 | `MoneyField` | `max_digits=18`, `decimal_places=2`, `default=Decimal('0')` | Decimal field for monetary values |
+| `QuantityField` | `default=0` | Nonnegative integer quantity |
+| `WeightField` | `max_digits=18`, `decimal_places=3`, `default=Decimal('0')` | Decimal weight |
+| `PercentField` | `max_digits=5`, `decimal_places=2`, `default=Decimal('0')` | Percentage points |
+| `SequenceField` | `default=0` | Nonnegative integer sort order |
 | `IntChoiceField` | `default=first_choice` | SmallIntegerField backed by choices enum |
 
 ```python
@@ -179,8 +189,19 @@ Product.objects.invalid()   # is_deleted=True / 1
 |-------|-------------|
 | `nx.drf.MoneyField` | `DecimalField(max_digits=18, decimal_places=2)` |
 | `nx.drf.QuantityField` | `IntegerField(min_value=0)` |
+| `nx.drf.WeightField` | `DecimalField(max_digits=18, decimal_places=3)` |
+| `nx.drf.PercentField` | `DecimalField(max_digits=5, decimal_places=2)` |
+| `nx.drf.SequenceField` | `IntegerField(min_value=0)` |
+| `nx.drf.NameField` | `CharField(max_length=128, allow_blank=True)` |
+| `nx.drf.CodeField` | `CharField(max_length=64, allow_blank=True)` |
+| `nx.drf.RemarkField` | `CharField(allow_blank=True)` |
+| `nx.drf.PhoneField` | `CharField(max_length=32, allow_blank=True)` |
+| `nx.drf.EmailField` | `EmailField(max_length=254, allow_blank=True)` |
+| `nx.drf.UrlField` | `URLField(max_length=200, allow_blank=True)` |
 | `nx.drf.MethodField` | Alias for `SerializerMethodField` |
 | `nx.drf.AutoInstanceLookupMixin` | Mixin that auto-looks up instance by `id` on save |
+
+The six text fields above default to `required=False`; all field options can be overridden.
 
 ```python
 from rest_framework import serializers

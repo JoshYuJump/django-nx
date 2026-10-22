@@ -5,7 +5,6 @@ This module provides extended versions of Django's model fields with:
 
 - Automatic help_text generation from verbose_name
 - Sensible default values for common use cases
-- Specialized fields for money/decimal amounts
 - Choice field variants for integer and text options
 
 Available Fields
@@ -13,7 +12,6 @@ Available Fields
 
 :CharField: CharField with empty string default and auto help_text
 :IntegerField: IntegerField with auto help_text support
-:MoneyField: DecimalField configured for monetary amounts
 :TextField: TextField with empty string default and auto help_text
 :BooleanField: BooleanField defaulting to False
 :IntChoiceField: SmallIntegerField for choice options
@@ -25,7 +23,6 @@ Available Fields
 :ArrayField: JSONField defaulting to empty list
 """
 
-from decimal import Decimal
 from typing import Any, Optional
 import uuid
 import shortuuid
@@ -43,7 +40,7 @@ __all__ = [
     "IntChoiceField",
     "IntegerField",
     "ManyToMany",
-    "MoneyField",
+    "MoneyField",  # noqa: F822 - provided by __getattr__ for legacy imports
     "ObjectField",
     "OneToOne",
     "ShadowForeignKey",
@@ -91,40 +88,6 @@ class IntegerField(models.IntegerField):
             kwargs["help_text"] = kwargs["verbose_name"]
 
         super().__init__(*args, **kwargs)
-
-
-class MoneyField(models.DecimalField):
-    """
-    MoneyField for monetary amounts using DECIMAL under the hood.
-
-    :param verbose_name: Human-readable name for the field
-    :param max_digits: Maximum number of digits (default: 18)
-    :param decimal_places: Number of decimal places (default: 2)
-    :param default: Default value (default: Decimal('0'))
-
-    Example::
-
-        amount = MoneyField('金额')
-        tax = MoneyField('税额', max_digits=14, decimal_places=4)
-    """
-
-    def __init__(
-        self, verbose_name: Optional[str] = None, *args: Any, **kwargs: Any
-    ) -> None:
-        # Sensible defaults; allow override by explicit kwargs
-        kwargs["max_digits"] = kwargs.get("max_digits", 18)
-        kwargs["decimal_places"] = kwargs.get("decimal_places", 2)
-        kwargs["default"] = kwargs.get("default", Decimal("0"))
-
-        # If help_text not provided, mirror verbose_name when available
-        if (
-            "help_text" not in kwargs
-            and "verbose_name" in kwargs
-            and kwargs["verbose_name"]
-        ):
-            kwargs["help_text"] = kwargs["verbose_name"]
-
-        super().__init__(verbose_name, *args, **kwargs)
 
 
 class TextField(models.TextField):
@@ -575,3 +538,12 @@ class ShortUUIDField(UUIDFieldMixin, CharField):
             return shortuuid.uuid(name=self.namespace)
         else:
             raise UUIDVersionError("UUID version %s is not valid." % self.version)
+
+
+def __getattr__(name: str) -> Any:
+    """Resolve the historical MoneyField import used by existing migrations."""
+    if name == "MoneyField":
+        from .business_fields import MoneyField
+
+        return MoneyField
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

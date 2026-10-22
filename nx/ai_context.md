@@ -1,4 +1,4 @@
-# django-nx 0.8.0 — AI API context
+# django-nx 0.9.0 — AI API context
 
 django-nx provides small, opinionated extensions for Django models and Django
 REST Framework. Treat the API listed here as public. Prefer it over inspecting
@@ -44,6 +44,16 @@ All field classes accept the corresponding Django field arguments. When
 | `nx.TextField` | `default=""`, `blank=True` |
 | `nx.IntegerField` | Django IntegerField with automatic help text |
 | `nx.MoneyField` | `max_digits=18`, `decimal_places=2`, `default=Decimal("0")` |
+| `nx.QuantityField` | PositiveIntegerField, `default=0` |
+| `nx.WeightField` | `max_digits=18`, `decimal_places=3`, `default=Decimal("0")` |
+| `nx.PercentField` | `max_digits=5`, `decimal_places=2`, `default=Decimal("0")`; percentage points |
+| `nx.SequenceField` | PositiveIntegerField, `default=0` |
+| `nx.NameField` | CharField, `max_length=128`, `default=""`, `blank=True` |
+| `nx.CodeField` | CharField, `max_length=64`, `default=""`, `blank=True` |
+| `nx.RemarkField` | TextField, `default=""`, `blank=True` |
+| `nx.PhoneField` | CharField, `max_length=32`, `default=""`, `blank=True` |
+| `nx.EmailField` | Django EmailField, `default=""`, `blank=True` |
+| `nx.UrlField` | Django URLField, `default=""`, `blank=True` |
 | `nx.BooleanField` | `default=False`, `blank=True` |
 | `nx.DateField` | `null=True`, `blank=True` |
 | `nx.DateTimeField` | `null=True`, `blank=True` |
@@ -82,6 +92,15 @@ class ProductSerializer(
 - `nx.drf.MoneyField`: DecimalField with `max_digits=18` and
   `decimal_places=2`.
 - `nx.drf.QuantityField`: IntegerField with `min_value=0`.
+- `nx.drf.WeightField`: DecimalField with `max_digits=18`, `decimal_places=3`.
+- `nx.drf.PercentField`: DecimalField with `max_digits=5`, `decimal_places=2`.
+- `nx.drf.SequenceField`: IntegerField with `min_value=0`.
+- `nx.drf.NameField`, `CodeField`, `PhoneField`: CharField with limits of 128,
+  64, and 32 characters respectively; blank strings accepted.
+- `nx.drf.RemarkField`: CharField accepting blank strings.
+- `nx.drf.EmailField`, `UrlField`: validated fields with limits of 254 and 200
+  characters respectively; blank strings accepted.
+- These six text serializer fields default to `required=False`.
 - `nx.drf.MethodField`: alias subclass of SerializerMethodField.
 - `nx.drf.AutoInstanceLookupMixin`: before saving, uses an input `id` to find
   and assign an existing `Meta.model` instance when no instance was supplied.
