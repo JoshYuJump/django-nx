@@ -344,6 +344,12 @@ class ManyToMany(models.ManyToManyField):
 
         super().__init__(to, *args, **kwargs)
 
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        # Django omits blank=False, but this class defaults to blank=True.
+        kwargs["blank"] = self.blank
+        return name, path, args, kwargs
+
 
 class ShadowManyToMany(ManyToMany):
     """ManyToMany field with database constraints disabled by default."""
@@ -352,7 +358,13 @@ class ShadowManyToMany(ManyToMany):
         self, to: Any, verbose_name: Optional[str] = None, *args: Any, **kwargs: Any
     ) -> None:
         kwargs.setdefault("db_constraint", False)
-        super().__init__(to, *args, **kwargs)
+        super().__init__(to, verbose_name, *args, **kwargs)
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        # Django omits db_constraint=True, but this class defaults to False.
+        kwargs["db_constraint"] = self.remote_field.db_constraint
+        return name, path, args, kwargs
 
 
 class ObjectField(models.JSONField):
